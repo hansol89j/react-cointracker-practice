@@ -10,10 +10,18 @@ const Container = styled.div`
 `;
 
 const Header = styled.div`
-  height: 10vh;
+  height: 30vh;
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const Img = styled.img`
+  height: 25px;
+  float: left;
+  margin-right: 15px;
+  position: relative;
+  top: -0.5vh;
 `;
 
 const CoinsList = styled.ul``;
@@ -23,14 +31,17 @@ const Coin = styled.li`
   border: 1px solid ${props => props.theme.textColor};
   border-radius: 15px;
   margin-bottom: 10px;
+  background-color: #ffffff;
   a {
     display: block;
-    text-align:center;
+    margin-left: 15px;
+    //text-align:center;
+    color:black;
   }
   &:hover {
-    color: ${props => props.theme.accentColor};
+    font-size: 15px;
     font-weight: bold;
-    border-bottom: 5px solid ${props => props.theme.accentColor};
+    border-bottom: 5px solid #ffffff;
   }
 `;
 const Title = styled.h1`
@@ -50,7 +61,7 @@ interface Icoins{
 
 function Coins(){
   const { isLoading, data } = useQuery<Icoins[]>("allCoins", fetchCoins);
-  console.log(data);
+
   return(
     <Container>
       <Header>
@@ -60,7 +71,8 @@ function Coins(){
         <CoinsList>
           {data?.slice(0,50).map(coin =>
             <Coin key={coin.id}>
-              <Link to={`./coin/${coin.id}`}>
+              <Link to={`/coin/${coin.id}`} state={{name: coin.name}}>
+                <Img src={`https://cryptoicon-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}/>
                 {coin.name}
               </Link>
             </Coin> 
