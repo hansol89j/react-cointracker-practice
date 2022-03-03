@@ -1,8 +1,4 @@
-interface DefaultTheme{
-  bgColor: string,
-  textColor: string,
-  accentColor: string,
-}
+import {DefaultTheme} from 'styled-components';
 
 export const theme: DefaultTheme = {
   bgColor: "#6c5ce7",

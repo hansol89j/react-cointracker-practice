@@ -1,6 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 //Reset.css component
 const GlobalStyle  = createGlobalStyle`
+  @import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -47,6 +48,18 @@ const GlobalStyle  = createGlobalStyle`
   table {
   border-collapse: collapse;
   border-spacing: 0;
+  }
+  //기본 reset.css에서 추가
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: ${(props) => props.theme.bgColor};
+    color: ${(props) => props.theme.textColor};
+  }
+  a {
+    text-decoration: none;
   }
 `;
 
