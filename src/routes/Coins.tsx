@@ -1,9 +1,20 @@
 import styled from 'styled-components';
 import {Link} from 'react-router-dom';
+import { useQuery } from "react-query";
+import { fetchCoins } from "../api";
 
-const Container = styled.div``;
+const Container = styled.div`
+  padding: 0px 20px;
+  max-width: 500px;
+  margin: 0 auto;
+`;
 
-const Header = styled.div``;
+const Header = styled.div`
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const CoinsList = styled.ul``;
 const Coin = styled.li`  
@@ -14,6 +25,7 @@ const Coin = styled.li`
   margin-bottom: 10px;
   a {
     display: block;
+    text-align:center;
   }
   &:hover {
     color: ${props => props.theme.accentColor};
@@ -25,52 +37,36 @@ const Title = styled.h1`
   color: ${props => props.theme.textColor};
   font-size: 50px;
 `;
-//coin top3 api 호출
-const coins = [
-  {
-    "id": "btc-bitcoin",
-    "name": "Bitcoin",
-    "symbol": "BTC",
-    "rank": 1,
-    "is_new": false,
-    "is_active": true,
-    "type": "coin"
-  },
-  {
-    "id": "eth-ethereum",
-    "name": "Ethereum",
-    "symbol": "ETH",
-    "rank": 2,
-    "is_new": false,
-    "is_active": true,
-    "type": "coin"
-  },
-  {
-    "id": "bnb-binance-coin",
-    "name": "Binance Coin",
-    "symbol": "BNB",
-    "rank": 3,
-    "is_new": false,
-    "is_active": true,
-    "type": "coin"
-  },
-]
+
+interface Icoins{
+  id: string,
+  name: string,
+  symbol: string,
+  rank: number,
+  is_new:boolean,
+  is_active: boolean,
+  type: string
+}
 
 function Coins(){
+  const { isLoading, data } = useQuery<Icoins[]>("allCoins", fetchCoins);
+  console.log(data);
   return(
     <Container>
       <Header>
         <Title>Coins</Title>
       </Header>
-      <CoinsList>
-        {coins.map((coin) => (
-          <Coin key={coin.id}>
-            <Link to={`./coin/${coin.id}`}>
-              {coin.name}
-            </Link>
-          </Coin>
-        ))}
-      </CoinsList>
+      {isLoading ? "Loading..." : (
+        <CoinsList>
+          {data?.slice(0,50).map(coin =>
+            <Coin key={coin.id}>
+              <Link to={`./coin/${coin.id}`}>
+                {coin.name}
+              </Link>
+            </Coin> 
+          )}
+        </CoinsList>
+      )}
     </Container>
   );
 }
