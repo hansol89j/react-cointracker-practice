@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 import styled from 'styled-components';
 import {Helmet} from 'react-helmet';
 import Chart from './Chart';
+import Coins from './Coins';
 
 const Container = styled.div`
   padding: 0 200px;
@@ -72,6 +73,19 @@ const Tab = styled.span<{isActive : boolean}>`
     props.theme.accentColor : props.theme.textColor};
   a {
     display: block;
+  }
+`;
+
+const Back = styled.div`
+  text-align: center;
+  font-size: 12px;
+  width: 50px;
+  background-color: #fdcb6e;
+  border-radius: 10px;
+  margin-top: 5px;
+  padding: 7px 10px;
+  a{
+    color: ${props => props.theme.bgColor};
   }
 `;
 
@@ -153,6 +167,9 @@ function Coin() {
 
   return (
     <Container>
+      <Back>
+        <Link to={"/"}>Back</Link>
+      </Back>
       <Helmet>
         <title>{state?.name ? state.name : loading? "Loading..." : infoData?.name}</title>
       </Helmet>
