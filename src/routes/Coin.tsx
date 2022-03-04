@@ -1,7 +1,6 @@
-import { useParams, useLocation} from "react-router";
-import {  Route } from "react-router-dom";
-import { useState } from "react";
-import { fetchCoinInfo, fetchCoins, fetchCoinTickers } from "../api";
+import { useParams, useLocation, Route, useMatch} from "react-router";
+import {Link} from 'react-router-dom';
+import { fetchCoinInfo,fetchCoinTickers } from "../api";
 import { useQuery } from "react-query";
 import styled from 'styled-components';
 
@@ -51,6 +50,29 @@ const OverviewItem = styled.div`
 const Description = styled.p`
   margin: 20px 0;
 `;
+
+const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  margin: 25px 0px;
+  gap: 10px;
+`;
+
+const Tab = styled.span<{isActive : boolean}>`
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: #2d34366e;
+  padding: 7px 0px;
+  border-radius: 10px;
+  color: ${props => props.isActive ?
+    props.theme.accentColor : props.theme.textColor};
+  a {
+    display: block;
+  }
+`;
+
 
 interface CoinInfo{
   id : string;
@@ -119,6 +141,8 @@ interface RouteState{
 function Coin() {
   const { coinId } = useParams();
   const { state } = useLocation() as RouteState;
+  const priceMatch = useMatch('/:coinId/price');
+  const chartMatch = useMatch('/:coinId/chart');
   const {isLoading: infoLoading, data: infoData} = useQuery<CoinInfo>(["info", coinId], () => fetchCoinInfo(coinId));
   const {isLoading: tickersLoading, data: tickerData} = useQuery<PriceData>(["tickers", coinId], () => fetchCoinTickers(coinId));
   const loading = infoLoading || tickersLoading;
@@ -157,6 +181,14 @@ function Coin() {
             <span>{tickerData?.max_supply}</span>            
           </OverviewItem>
         </Overview>
+        <Tabs>
+          <Tab isActive={chartMatch !== null}>
+            <Link to={`/${coinId}/price`}>Price</Link>
+          </Tab>
+          <Tab isActive = {priceMatch !== null}>
+            <Link to = {`/${coinId}/price`}>Price</Link>
+          </Tab>
+        </Tabs>
       </>
     </Container>    
   );
