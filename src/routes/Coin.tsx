@@ -1,8 +1,10 @@
-import { useParams, useLocation, Route, useMatch} from "react-router";
+import { useParams, useLocation, useMatch} from "react-router";
 import {Link} from 'react-router-dom';
 import { fetchCoinInfo,fetchCoinTickers } from "../api";
 import { useQuery } from "react-query";
 import styled from 'styled-components';
+import {Helmet} from 'react-helmet';
+import Chart from './Chart';
 
 const Container = styled.div`
   padding: 0 200px;
@@ -144,11 +146,16 @@ function Coin() {
   const priceMatch = useMatch('/:coinId/price');
   const chartMatch = useMatch('/:coinId/chart');
   const {isLoading: infoLoading, data: infoData} = useQuery<CoinInfo>(["info", coinId], () => fetchCoinInfo(coinId));
-  const {isLoading: tickersLoading, data: tickerData} = useQuery<PriceData>(["tickers", coinId], () => fetchCoinTickers(coinId));
+  const {isLoading: tickersLoading, data: tickerData} = useQuery<PriceData>(["tickers", coinId], () => fetchCoinTickers(coinId),{
+    refetchInterval: 5000
+  });
   const loading = infoLoading || tickersLoading;
 
   return (
     <Container>
+      <Helmet>
+        <title>{state?.name ? state.name : loading? "Loading..." : infoData?.name}</title>
+      </Helmet>
       <Header>
         <Title>{state.name}</Title>
       </Header>
@@ -165,7 +172,7 @@ function Coin() {
           </OverviewItem>
           <OverviewItem>
             <span>price: </span>
-            <span></span>            
+            <span>$ {tickerData?.quotes.USD.price.toFixed(2)}</span>            
           </OverviewItem>
         </Overview>
         <Description>
@@ -174,21 +181,24 @@ function Coin() {
         <Overview>
           <OverviewItem>
             <span>Total Supply: </span>
-            <span>{tickerData?.total_supply}</span>            
+            <span>{tickerData?.total_supply.toLocaleString('en-us',{minimumFractionDigits: 0})}</span>            
           </OverviewItem>
           <OverviewItem>
             <span>Max Supply: </span>
-            <span>{tickerData?.max_supply}</span>            
+            <span>{tickerData?.max_supply.toLocaleString('en-us',{minimumFractionDigits: 0})}</span>            
           </OverviewItem>
         </Overview>
         <Tabs>
-          <Tab isActive={chartMatch !== null}>
+          <Tab isActive={priceMatch !== null}>
             <Link to={`/${coinId}/price`}>Price</Link>
           </Tab>
-          <Tab isActive = {priceMatch !== null}>
-            <Link to = {`/${coinId}/price`}>Price</Link>
+          <Tab isActive = {chartMatch !== null}>
+            <Link to = {`/${coinId}/chart`}>Chart</Link>
           </Tab>
         </Tabs>
+        <div>
+          <Chart/>
+        </div>
       </>
     </Container>    
   );
