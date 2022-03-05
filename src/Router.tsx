@@ -11,8 +11,8 @@ function Router(){
       <Routes>
         <Route path="/" element={<Coins />} />
         <Route path="/coin/:coinId" element={<Coin />} />
-        <Route path="/price" element={<Price/>} />
-        <Route path="/chart" element={<Chart/>} />
+        <Route path="/:coinId/price" element={<Price/>} />
+        <Route path="/:coinId/chart" element={<Chart/>} />
       </Routes>
     </BrowserRouter>
   );

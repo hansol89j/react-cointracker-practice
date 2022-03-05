@@ -61,6 +61,12 @@ const GlobalStyle  = createGlobalStyle`
   a {
     text-decoration: none;
   }
+  button {
+    border: 0px;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: ${(props) => props.theme.accentColor};    
+  }
 `;
 
 export default GlobalStyle; 

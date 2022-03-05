@@ -20,8 +20,6 @@ function Chart(){
     refetchInterval: 10000,
   });
 
-  console.log(data);
-
   return (
     <div>    
     { isLoading ? "Loading chart..." : (

@@ -17,6 +17,11 @@ const Header = styled.div`
   align-items: center;
 `;
 
+const Loader = styled.div`
+  text-align: center;
+  display: block;
+`;
+
 const Img = styled.img`
   height: 25px;
   float: left;
@@ -71,7 +76,7 @@ function Coins(){
       <Header>
         <Title>Coins</Title>
       </Header>
-      {isLoading ? "Loading..." : (
+      {isLoading ? <Loader>Loading...</Loader> : (
         <CoinsList>
           {data?.slice(0,50).map(coin =>
             <Coin key={coin.id}>

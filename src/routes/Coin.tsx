@@ -1,11 +1,9 @@
 import { useParams, useLocation, useMatch} from "react-router";
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { fetchCoinInfo,fetchCoinTickers } from "../api";
 import { useQuery } from "react-query";
 import styled from 'styled-components';
 import {Helmet} from 'react-helmet';
-import Chart from './Chart';
-import Coins from './Coins';
 
 const Container = styled.div`
   padding: 0 200px;
@@ -33,7 +31,7 @@ const Loader = styled.div`
 const Overview = styled.div`
   display: flex;
   justify-content: space-between;
-  background-color: #59767e6d;
+  background-color: #dfe6e975;
   padding: 10px 20px;
   border-radius: 10px; 
 `;
@@ -66,13 +64,24 @@ const Tab = styled.span<{isActive : boolean}>`
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 400;
+  color: ${props => props.theme.textColor};
+  padding: 7px 0px;
+  border-radius: 10px;
+  background-color: ${props => props.isActive ?
+    props.theme.accentColor :  `#dfe6e975`};
+  a {
+    display: block;
+  }
+  button{
+    text-align: center;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 400;
   background-color: #2d34366e;
   padding: 7px 0px;
   border-radius: 10px;
   color: ${props => props.isActive ?
     props.theme.accentColor : props.theme.textColor};
-  a {
-    display: block;
   }
 `;
 
@@ -80,12 +89,12 @@ const Back = styled.div`
   text-align: center;
   font-size: 12px;
   width: 50px;
-  background-color: #fdcb6e;
+  background-color: ${props=> props.theme.accentColor};
   border-radius: 10px;
   margin-top: 5px;
   padding: 7px 10px;
   a{
-    color: ${props => props.theme.bgColor};
+    color: ${props => props.theme.textColor};
   }
 `;
 
@@ -206,16 +215,13 @@ function Coin() {
           </OverviewItem>
         </Overview>
         <Tabs>
-          <Tab isActive={priceMatch !== null}>
-            <Link to={`/${coinId}/price`}>Price</Link>
-          </Tab>
           <Tab isActive = {chartMatch !== null}>
             <Link to = {`/${coinId}/chart`}>Chart</Link>
           </Tab>
+          <Tab isActive = {priceMatch !== null}>
+            <Link to = {`/${coinId}/price`}>Price</Link>
+          </Tab>
         </Tabs>
-        <div>
-          <Chart/>
-        </div>
       </>
     </Container>    
   );
